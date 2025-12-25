@@ -18,7 +18,7 @@ def spinwheel(input_data:list):
     elif pos > 99:
       pos = pos - 100
       
-    print(f"{x}-{spin}-{pos}")
+    #print(f"{x}-{spin}-{pos}")
       
   return count
   

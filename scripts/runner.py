@@ -3,7 +3,7 @@ from . import AoC_2025
 def _operator(year:int): 
   rn = {
     "year2025day1": AoC_2025.day1.run,
-    "year2025day2": AoC_2025.day1.run  
+    "year2025day2": AoC_2025.day2.run  
   }
   return rn
   
