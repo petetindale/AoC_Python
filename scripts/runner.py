@@ -5,7 +5,8 @@ def _operator(year:int):
     "year2025day1": AoC_2025.day1.run,
     "year2025day2": AoC_2025.day2.run,
     "year2025day3": AoC_2025.day3.run,
-    "year2025day4": AoC_2025.day4.run    
+    "year2025day4": AoC_2025.day4.run,
+    "year2025day5": AoC_2025.day5.run   
   }
   return rn
   
