@@ -3,7 +3,7 @@ from common.data_handler import datahandler
 from scripts import runner
 
 cyear = 2025 #current year
-cday = 5 #current day
+cday = 6 #current day
 cpart = 2 #part 1 or 2
 ctest = False
 #ctest = True

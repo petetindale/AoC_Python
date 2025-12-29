@@ -13,7 +13,7 @@ class datahandler:
     self._testdata = None
   
   def _cleanlist(self, input_data:list):
-    return list(map(lambda x : x.strip(), input_data))
+    return list(map(lambda x : x.rstrip("\n"), input_data)) #remove newlines from strings only whitespace is needed for some days. 
   
   @property  
   def data(self):
