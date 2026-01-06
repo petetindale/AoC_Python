@@ -2,7 +2,7 @@ import numpy as np
 import functools as fn
 from operator import mul
 
-VERBOSE = True
+VERBOSE = False
 
 
 class ConnectJunctions:
@@ -11,17 +11,25 @@ class ConnectJunctions:
     
     self.distarray = ConnectJunctions.measure_distances(self.locations)
     
-
     self.i, self.j, self.d = ConnectJunctions.top_n_closest_pairs(self.distarray, n)
 
     if VERBOSE : print(list(zip(self.i, self.j, self.d)))
     
-    self.buckets = ConnectJunctions.bucket_closest(self.i, self.j)
+    self.buckets, self.last = ConnectJunctions.bucket_closest(self.i, self.j, len(self.locations))
 
     if VERBOSE : print(self.buckets)
 
   def top_3_largest_buckets_lens_multiplied(self):
     return fn.reduce(mul, list(map(lambda b: len(b), self.buckets[:3])))
+    
+  def last_x_connected(self):
+    if self.last != (0,0):
+      a,b = self.last
+      
+      loca = self.locations[a]
+      locb = self.locations[b]
+      return loca[0] * locb[0]
+    return 0
 
   @staticmethod
   def top_n_closest_pairs(dist: np.ndarray, n: int):
@@ -55,8 +63,9 @@ class ConnectJunctions:
     return dist
 
   @staticmethod
-  def bucket_closest(a, b):
+  def bucket_closest(a:np.array, b:np.array, n:int):
       buckets = []
+      last = (0,0)
 
       for x, y in zip(a, b):
           bx = next((k for k, s in enumerate(buckets) if x in s), None)
@@ -74,10 +83,20 @@ class ConnectJunctions:
                   # merge by into bx (and delete the old bucket)
                   buckets[bx] |= buckets[by]
                   del buckets[by]
+          
+  
+          
+          if len(buckets) >= 1:
+            if len(buckets[0]) == n:
+              last = (x, y)
+              break # all in the same bucket
+          
 
       buckets.sort(key=len, reverse=True)
+      
+      if VERBOSE : print(last)
 
-      return buckets
+      return buckets, last
 
     
   
@@ -97,6 +116,6 @@ def run(part:int, input_data:list):
   if part == 1 :
     ans = junctions.top_3_largest_buckets_lens_multiplied()
   else :
-    ans = 0
+    ans = junctions.last_x_connected()
   return ans
   
