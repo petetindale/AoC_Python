@@ -6,7 +6,7 @@ cyear = 2025 #current year
 cday = 8 #current day
 cpart = 1 #part 1 or 2
 ctest = False
-#ctest = True
+ctest = True
 
 dh = datahandler(cyear, cday)
 

@@ -31,7 +31,26 @@ def measuredistances(locs3ds:np.array):
   
   return dist
   
-
+def bucketclosest(i, j):
+  buckets = list()
+  
+  for index, closest in zip(i,j):
+    
+    all_items = set().union(*buckets)
+    if {index, closest} & all_items:
+      bucketidx = next((i for i, s in enumerate(buckets) if index in s), None)
+      if bucketidx is not None:
+        buckets[bucketidx].add(closest)
+      else :
+        bucketidx = next((i for i, s in enumerate(buckets) if closest in s), None)
+        buckets[bucketidx].add(index)
+        
+    else :
+      buckets.append({index,closest})
+      
+  return buckets
+  
+  
 
 class connectjunctions:
   def __init__(self, input_data:list):
@@ -40,28 +59,15 @@ class connectjunctions:
     self.distarray = measuredistances(self.locations)
     
     
+    k = 1000 if len(self.locations) > 100 else 10 #yuk ... but not adding another var to the input proceas ... yet
     
+    self.i, self.j, self.d = top_k_closest_pairs(self.distarray, k)
     
+    if VERBOSE : print(list(zip(self.i, self.j, self.d)))
     
-  def bucketclosest(self, closestidx):
-    buckets = list()
+    self.buckets = bucketclosest(self.i, self.j)
     
-    for index, closest in enumerate(closestidx):
-      
-      all_items = set().union(*buckets)
-      if {index, closest} & all_items:
-        bucketidx = next((i for i, s in enumerate(buckets) if index in s), None)
-        if bucketidx is not None:
-          buckets[bucketidx].add(closest)
-        else :
-          bucketidx = next((i for i, s in enumerate(buckets) if closest in s), None)
-          buckets[bucketidx].add(index)
-          
-      else :
-        buckets.append({index,closest})
-        
-    print(buckets)
-    
+    print(self.buckets)
   
   
   
