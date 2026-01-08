@@ -1,25 +1,38 @@
 import numpy as np
+from itertools import combinations
 
-VERBOSE = False
+VERBOSE = True
 
 class FloorTiles:
   def __init__(self, input_data:list):
     self.red_tiles = np.array(list(map(lambda loc: list(map(lambda coord: int(coord), loc.split(","))), input_data)))
-
-    #Get leftmost, rightmost, topmost, bottommost
-    self.min_x = np.min(self.red_tiles[:,0])
-    self.min_idx = np.argmin(self.red_tiles[:,0])
-    self.max_x = np.max(self.red_tiles[:,0])
-    self.max_idx = np.argmax(self.red_tiles[:,0])
-    self.min_y = np.min(self.red_tiles[:,1])
-    self.min_idy = np.argmin(self.red_tiles[:,1])
-    self.max_y = np.max(self.red_tiles[:,1])
-    self.max_idy = np.argmax(self.red_tiles[:,1])
-
+      
+    self.areas = FloorTiles.all_areas_with_index(self.red_tiles)
+    
+    self.areas.sort(key=lambda x:x[2], reverse=True)
+    
+    
+    if VERBOSE : print(self.areas)
 
   def largest_area(self):
-    
+    if len(self.areas) > 0:
+      return self.areas[0][2]
     return 0
+  
+  @staticmethod
+  def calculate_area(posa, posb):
+    ax, ay = posa
+    bx, by = posb
+    
+    lenx = abs(ax-bx)+1
+    leny = abs(ay-by)+1
+    
+    return lenx * leny
+  
+  @staticmethod
+  def all_areas_with_index(points):
+    # returns (i, j, area)
+    return [(i, j, FloorTiles.calculate_area(points[i], points[j])) for i, j in combinations(range(len(points)), 2)]
     
 
 
